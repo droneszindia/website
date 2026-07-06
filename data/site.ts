@@ -1,0 +1,57 @@
+/**
+ * Site-wide copy: nav, metadata, pillars, footer, contact. PLACEHOLDER contact details —
+ * the live-site values are placeholders too; swap real ones before launch.
+ */
+
+export interface NavItem {
+  label: string;
+  /** Route href, or "#anchor" resolved via Lenis scrollTo on the home page. */
+  href: string;
+}
+
+export const NAV: NavItem[] = [
+  { label: "Home", href: "/" },
+  { label: "Frames", href: "#frames-section" },
+  { label: "Contact", href: "/contact" },
+];
+
+export const SITE = {
+  name: "DronesZ India",
+  shortName: "DronesZ",
+  tagline: "Redefining Flight. Assembling the Future.",
+  description:
+    "DronesZ India — custom airframes, counter-UAS systems, consumer drones, components, and drone-lab setup. Engineered in Mumbai.",
+  location: "Mumbai, India",
+} as const;
+
+export interface Pillar {
+  title: string;
+  body: string;
+}
+
+export const PILLARS: Pillar[] = [
+  {
+    title: "Innovation",
+    body: "In-house design and fabrication — from airframe geometry to flight software.",
+  },
+  {
+    title: "Security",
+    body: "Counter-UAS and encrypted platforms built for environments that demand trust.",
+  },
+  {
+    title: "Precision",
+    body: "Every build flight-tested and validated before it leaves the bench.",
+  },
+];
+
+/** Placeholder — replace before launch. */
+export const CONTACT = {
+  email: "hello@dronesz.in",
+  phone: "+91 00000 00000",
+  address: "Mumbai, Maharashtra, India",
+} as const;
+
+export const FOOTER = {
+  blurb: "Engineered in Mumbai. Assembled for the mission.",
+  copyright: `© ${new Date().getFullYear()} DronesZ India. All rights reserved.`,
+} as const;
