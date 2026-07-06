@@ -166,7 +166,7 @@
   width: 100%;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  background: oklch(14% 0.006 268);
+  background: var(--color-void);
   box-shadow: 0 40px 90px -40px
     color-mix(in oklch, var(--color-brand-red) 45%, transparent);
 }
@@ -255,7 +255,7 @@
   font-family: var(--font-display);
   font-weight: 500;
   font-size: var(--text-base);
-  color: oklch(98% 0 0);
+  color: var(--color-on-dark);
   background: var(--color-brand-red);
   border-radius: var(--radius-sm);
   text-decoration: none;
