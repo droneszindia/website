@@ -70,7 +70,7 @@ export function HeroSection() {
         {/* Poster fallback (no-JS / canvas failure): the assembled last frame. */}
         <img
           className="hero-poster"
-          src="/hero-seq/100.jpg"
+          src="/hero-seq/100.webp"
           alt="A DronesZ 5-inch FPV drone, fully assembled in a matte studio void with red rim light."
           width={1280}
           height={560}

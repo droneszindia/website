@@ -3,7 +3,7 @@
 import { useEffect, useRef, type MutableRefObject } from "react";
 
 /**
- * Scroll-scrubbed frame-sequence canvas (Apple-style): draws the pre-extracted JPEG frame that
+ * Scroll-scrubbed frame-sequence canvas (Apple-style): draws the pre-extracted WebP frame that
  * matches a scroll-progress ref (0→1) onto a cover-fit <canvas>. Seeks instantly with no codec
  * jank, iOS-safe. Generic over the sequence directory + frame count so the hero and the custom
  * "wireframe → hardware" reveal share one implementation.
@@ -17,7 +17,7 @@ export function FrameSequenceCanvas({
   onReady,
   className = "frame-seq-canvas",
 }: {
-  /** Public dir of the sequence, e.g. "/custom-seq" (frames named 001.jpg…). */
+  /** Public dir of the sequence, e.g. "/custom-seq" (frames named 001.webp…). */
   dir: string;
   count: number;
   progressRef: MutableRefObject<number>;
@@ -66,7 +66,7 @@ export function FrameSequenceCanvas({
 
     for (let i = 0; i < count; i++) {
       const img = new Image();
-      img.src = `${dir}/${String(i + 1).padStart(3, "0")}.jpg`;
+      img.src = `${dir}/${String(i + 1).padStart(3, "0")}.webp`;
       img.onload = draw;
       frames[i] = img;
     }

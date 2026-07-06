@@ -107,7 +107,7 @@ function CustomRevealPanel() {
       <div className="custom-reveal__media">
         <img
           className="custom-reveal__poster"
-          src={`/custom-seq/${String(CUSTOM_SEQ_COUNT).padStart(3, "0")}.jpg`}
+          src={`/custom-seq/${String(CUSTOM_SEQ_COUNT).padStart(3, "0")}.webp`}
           alt="A bespoke DronesZ airframe rendered from CAD into a finished carbon-and-red frame."
           loading="lazy"
         />
