@@ -3,7 +3,7 @@
   height: 100vh;
   width: 100%;
   overflow: hidden;
-  background: oklch(14% 0.006 268); /* matte void behind the footage */
+  background: var(--color-void); /* matte void behind the footage */
 }
 
 /* Full-bleed assembling-drone footage — fills the entire hero. */
@@ -33,9 +33,9 @@
   z-index: 2;
   background: linear-gradient(
     95deg,
-    oklch(10% 0.006 268 / 0.35) 0%,
-    oklch(10% 0.006 268 / 0.12) 42%,
-    transparent 66%
+    oklch(10% 0.006 268 / 0.45) 0%,
+    oklch(10% 0.006 268 / 0.16) 44%,
+    transparent 68%
   );
 }
 
@@ -68,7 +68,7 @@
   font-size: var(--text-hero);
   line-height: 0.94;
   max-width: 16ch;
-  color: oklch(98% 0 0);
+  color: var(--color-on-dark);
 }
 
 .hero-title .accent {

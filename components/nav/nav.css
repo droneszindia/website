@@ -27,7 +27,7 @@
 .nav[data-over-hero] .nav__brand,
 .nav[data-over-hero] .nav__link:hover,
 .nav[data-over-hero] .nav__link[aria-current="page"] {
-  color: oklch(98% 0 0);
+  color: var(--color-on-dark);
 }
 .nav[data-over-hero] .nav__link {
   color: oklch(84% 0.008 268);
@@ -66,6 +66,13 @@
 }
 .nav__link:hover {
   color: var(--color-white);
+}
+/* Invisible expanded hit area → tap target ≥44px tall without shifting layout
+   or detaching the underline (::after). Horizontal inset stays under the nav gap. */
+.nav__link::before {
+  content: "";
+  position: absolute;
+  inset: -11px -4px;
 }
 
 /* red underline grows from left on hover + active */

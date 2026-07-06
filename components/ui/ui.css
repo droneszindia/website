@@ -25,7 +25,9 @@
 
 .btn--primary {
   background: var(--color-brand-red);
-  color: oklch(98% 0 0); /* always light on the red fill, theme-independent */
+  color: var(
+    --color-on-dark
+  ); /* always light on the red fill, theme-independent */
 }
 .btn--primary:hover {
   background: var(--color-brand-red-hi);
@@ -93,6 +95,12 @@
 .field__control:focus {
   outline: none;
   border-color: var(--color-brand-red-hi);
+}
+/* Keyboard focus keeps a visible ring — the border-color change alone isn't a
+   sufficient indicator, and this overrides the outline:none above for a11y. */
+.field__control:focus-visible {
+  outline: 2px solid var(--color-brand-red-hi);
+  outline-offset: 1px;
 }
 .field__control[aria-invalid="true"] {
   border-color: var(--color-brand-red);

@@ -1,7 +1,7 @@
 /* Design tokens — DronesZ cinematic. OKLCH throughout. Values refined by the /design brief before Phase 6. */
 @theme {
   /* ---- Color: LIGHT preview — white canvas, ink type, single red accent ---- */
-  /* (dark original preserved in tokens.css.dark.bak; same token names, revert = restore the bak) */
+  /* (dark original lives in git history — same token names; revert by restoring from a prior commit) */
   --color-canvas: oklch(98% 0.002 268); /* near-white base */
   --color-canvas-deep: oklch(
     94.5% 0.006 25
@@ -14,7 +14,16 @@
     23% 0.018 268
   ); /* primary type (now ink — name kept for compat) */
   --color-muted: oklch(46% 0.015 268); /* secondary type */
-  --color-faint: oklch(60% 0.012 268); /* tertiary / captions */
+  --color-faint: oklch(
+    53% 0.012 268
+  ); /* tertiary / captions — 53% L → 4.99:1 on canvas (WCAG AA) */
+
+  --color-on-dark: oklch(
+    98% 0 0
+  ); /* light text on dark/accent surfaces (hero, nav-over-hero, red fills) */
+  --color-void: oklch(
+    14% 0.006 268
+  ); /* deep matte void behind footage / specimens */
 
   --color-brand-red: oklch(
     55% 0.224 27

@@ -13,7 +13,9 @@
   font-size: var(--text-xs);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--color-brand-red-hi);
+  color: var(
+    --color-brand-red-dim
+  ); /* 48% L → AA contrast for small uppercase text */
   background: color-mix(in oklch, var(--color-brand-red) 10%, transparent);
   border: 1px solid color-mix(in oklch, var(--color-brand-red) 32%, transparent);
   border-radius: var(--radius-sm);
