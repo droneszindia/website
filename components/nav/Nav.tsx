@@ -47,6 +47,15 @@ export function Nav() {
   return (
     <header className="nav" data-over-hero={overHero || undefined}>
       <Link href="/" className="nav__brand" aria-label={`${SITE.name} home`}>
+        {/* Official quadcopter mark — stays brand-red on both the dark hero and the
+            light sections, so it needs no color flip. alt="" as the link is labelled. */}
+        <img
+          src="/brand/drone-mark.png"
+          alt=""
+          width={26}
+          height={26}
+          className="nav__brand-mark"
+        />
         Drones<span className="accent">Z</span>
       </Link>
       <nav aria-label="Main navigation">

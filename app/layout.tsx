@@ -3,6 +3,7 @@ import "../styles/global.css";
 import { inter, display } from "./fonts";
 import { LenisGSAPProvider } from "@/components/providers/LenisGSAPProvider";
 import { Nav } from "@/components/nav/Nav";
+import { SoundToggle } from "@/components/audio/SoundToggle";
 
 export const metadata: Metadata = {
   title: "DronesZ India — Redefining Flight. Assembling the Future.",
@@ -19,6 +20,7 @@ export default function RootLayout({
         <LenisGSAPProvider>
           <Nav />
           {children}
+          <SoundToggle />
         </LenisGSAPProvider>
       </body>
     </html>

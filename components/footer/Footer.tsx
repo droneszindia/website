@@ -6,6 +6,13 @@ export function Footer() {
     <footer className="footer">
       <div>
         <div className="footer__brand">
+          <img
+            src="/brand/drone-mark.png"
+            alt=""
+            width={30}
+            height={30}
+            className="footer__brand-mark"
+          />
           Drones<span className="accent">Z</span>
         </div>
         <p className="footer__blurb">{FOOTER.blurb}</p>
@@ -16,7 +23,9 @@ export function Footer() {
           <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
         </p>
         <p>
-          <a href={`tel:${CONTACT.phone.replace(/\s/g, "")}`}>{CONTACT.phone}</a>
+          <a href={`tel:${CONTACT.phone.replace(/\s/g, "")}`}>
+            {CONTACT.phone}
+          </a>
         </p>
         <p style={{ marginTop: "var(--space-2)" }}>{FOOTER.copyright}</p>
       </div>

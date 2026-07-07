@@ -44,9 +44,9 @@ export const PILLARS: Pillar[] = [
   },
 ];
 
-/** Placeholder — replace before launch. */
+/** Phone is still a placeholder — replace before launch. */
 export const CONTACT = {
-  email: "hello@dronesz.in",
+  email: "enquiry.dronesz@gmail.com",
   phone: "+91 00000 00000",
   address: "Mumbai, Maharashtra, India",
 } as const;

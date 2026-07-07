@@ -34,12 +34,20 @@
 }
 
 .nav__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: var(--text-lg);
   letter-spacing: -0.01em;
   color: var(--color-white);
   transition: color var(--duration-normal) var(--ease-out-expo);
+}
+/* Sized in em so the mark tracks the wordmark's cap height across the fluid scale. */
+.nav__brand-mark {
+  height: 1.55em;
+  width: auto;
 }
 .nav__brand .accent {
   color: var(--color-brand-red);
