@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SectionLabel } from "@/components/ui/SectionLabel";
+import { CustomBuildForm } from "@/components/custom/CustomBuildForm";
 import { CONTACT, SITE } from "@/data/site";
 import "@/components/sections.css";
 import "./contact.css";
@@ -72,9 +73,7 @@ const DEFAULT_COPY: ContactCopy = {
 
 // Validate the param at the boundary — anything but the two known paths → default.
 function resolveCopy(path?: string): ContactCopy {
-  return path === "design" || path === "idea"
-    ? PATH_COPY[path]
-    : DEFAULT_COPY;
+  return path === "design" || path === "idea" ? PATH_COPY[path] : DEFAULT_COPY;
 }
 
 export default async function ContactPage({
@@ -84,7 +83,7 @@ export default async function ContactPage({
 }) {
   const { path } = await searchParams;
   const copy = resolveCopy(path);
-  const mailto = `mailto:${CONTACT.email}?subject=${encodeURIComponent(copy.subject)}`;
+  const formPath = path === "design" || path === "idea" ? path : "general";
 
   return (
     <main style={{ paddingTop: "5rem" }}>
@@ -115,21 +114,13 @@ export default async function ContactPage({
         </div>
 
         <div className="contact-page__form">
-          {/* The validated form mounts here once storage + email provider are chosen.
-              Until then, a pre-addressed email path so leads are never lost. */}
           <p className="contact-panel__eyebrow">What to include</p>
           <ul className="contact-panel__checklist">
             {copy.checklist.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
-          <a className="btn btn--primary contact-panel__cta" href={mailto}>
-            {copy.ctaLabel} →
-          </a>
-          <p className="contact-panel__note">
-            A full enquiry form is on the way — for now, email reaches us
-            fastest and we&apos;ll reply within a business day.
-          </p>
+          <CustomBuildForm path={formPath} />
         </div>
       </section>
     </main>

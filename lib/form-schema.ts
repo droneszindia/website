@@ -32,5 +32,21 @@ export const FramesLeadSchema = z.object({
   _hp: honeypot,
 });
 
+/**
+ * Custom-build enquiry. `path` mirrors the contact page's design|idea fork (general when the
+ * visitor arrives without one). File handling is separate — small files ride along as a
+ * multipart attachment, large ones as a validated Blob `fileUrl` — so only the file's metadata
+ * is described here; the bytes/link are validated in the route.
+ */
+export const CustomBuildSchema = z.object({
+  name,
+  email,
+  phone,
+  path: z.enum(["design", "idea", "general"]).default("general"),
+  message: z.string().trim().min(10, "Tell us a little more").max(2000),
+  _hp: honeypot,
+});
+
 export type ContactForm = z.infer<typeof ContactFormSchema>;
 export type FramesLead = z.infer<typeof FramesLeadSchema>;
+export type CustomBuild = z.infer<typeof CustomBuildSchema>;

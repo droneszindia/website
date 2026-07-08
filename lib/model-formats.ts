@@ -20,6 +20,20 @@ const CAD_EXTS = ["step", "stp"] as const;
 export const MAX_FILE_BYTES = 50 * 1024 * 1024; // 50 MB — comfortably covers dense STL/STEP.
 export const MAX_FILE_MB = Math.round(MAX_FILE_BYTES / 1024 / 1024);
 
+/**
+ * Files at or below this size are POSTed straight to the submission route and attached to the
+ * notification email; larger files are client-uploaded to Blob first and emailed as a link.
+ * Kept under Vercel's ~4.5 MB serverless request-body cap so the direct-attach POST never
+ * exceeds it (multipart overhead + text fields included). Single source of truth for the
+ * split, shared by the form (which branch to take) and the route (which branch to expect).
+ */
+export const ATTACH_MAX_BYTES = 4 * 1024 * 1024; // 4 MB
+
+/** True when a file is small enough to attach directly rather than route through Blob. */
+export function shouldAttach(size: number): boolean {
+  return size <= ATTACH_MAX_BYTES;
+}
+
 /** `accept` attribute for <input type="file"> — extensions + any image MIME. */
 export const ACCEPT_ATTR = [
   ...MESH_EXTS.map((e) => `.${e}`),
@@ -56,7 +70,11 @@ export function validateFile(file: File): FileValidation {
     };
   }
   if (file.size > MAX_FILE_BYTES) {
-    return { ok: false, kind, error: `File is too large (max ${MAX_FILE_MB} MB).` };
+    return {
+      ok: false,
+      kind,
+      error: `File is too large (max ${MAX_FILE_MB} MB).`,
+    };
   }
   return { ok: true, kind };
 }

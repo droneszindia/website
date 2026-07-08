@@ -44,10 +44,9 @@ export const PILLARS: Pillar[] = [
   },
 ];
 
-/** Phone is still a placeholder — replace before launch. */
 export const CONTACT = {
   email: "enquiry.dronesz@gmail.com",
-  phone: "+91 00000 00000",
+  phone: "+91 98273 44411",
   address: "Mumbai, Maharashtra, India",
 } as const;
 
