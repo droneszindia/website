@@ -62,6 +62,9 @@ export function FrameDossierPanel({
       pin
       scrollDistance={Math.max(1.2, callouts.length * 0.45)}
       refreshPriority={refreshPriority}
+      // ≤860px the pinned leader-line diagram doesn't fit — degrade to a static stacked
+      // photo + label list (matches the frames.css mobile block) instead of clipping.
+      animateMinWidth={861}
       onTimeline={buildTimeline}
     >
       <div className="dossier__header">

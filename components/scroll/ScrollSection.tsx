@@ -21,6 +21,11 @@ interface ScrollSectionProps {
    */
   refreshPriority?: number;
   /**
+   * Below this viewport width, skip the pin/scrub and render the static resting state (same path
+   * as reduced-motion). For pinned layouts that don't fit a phone screen and would otherwise clip.
+   */
+  animateMinWidth?: number;
+  /**
    * Build the chapter timeline. Receives a timeline already wired to a pinned,
    * scrubbed ScrollTrigger on this section. Only invoked when motion is allowed —
    * under reduced-motion the section renders its final state instantly.
@@ -40,6 +45,7 @@ export function ScrollSection({
   scrollDistance = 1,
   pin = true,
   refreshPriority = 0,
+  animateMinWidth,
   onTimeline,
 }: ScrollSectionProps) {
   const ref = useRef<HTMLElement>(null);
@@ -76,6 +82,7 @@ export function ScrollSection({
           },
         },
         el,
+        animateMinWidth,
       );
     },
     { scope: ref },

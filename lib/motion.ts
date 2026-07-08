@@ -20,13 +20,28 @@ interface MotionBranches {
  * path, not an afterthought (docs/research.md §1).
  *
  * @param scope optional element scope so selectors resolve locally and revert cleanly.
+ * @param animateMinWidth if set, the animated (pinned) branch only runs at or above this
+ *   viewport width; narrower screens take the static `reduced` branch too. Use for pinned
+ *   layouts that can't fit a phone viewport — they degrade to the resting state instead of
+ *   clipping. Reactive: gsap.matchMedia re-evaluates on resize/rotate.
  */
 export function withMotionPreference(
   branches: MotionBranches,
   scope?: Element | null,
+  animateMinWidth?: number,
 ): gsap.MatchMedia {
   const mm = scope ? gsap.matchMedia(scope) : gsap.matchMedia();
-  mm.add("(prefers-reduced-motion: no-preference)", branches.animated);
-  mm.add("(prefers-reduced-motion: reduce)", branches.reduced);
+  const widthClause = animateMinWidth
+    ? ` and (min-width: ${animateMinWidth}px)`
+    : "";
+  mm.add(
+    `(prefers-reduced-motion: no-preference)${widthClause}`,
+    branches.animated,
+  );
+  // The static path also covers narrow viewports when an animateMinWidth gate is set.
+  const reducedQuery = animateMinWidth
+    ? `(prefers-reduced-motion: reduce), (max-width: ${animateMinWidth - 1}px)`
+    : "(prefers-reduced-motion: reduce)";
+  mm.add(reducedQuery, branches.reduced);
   return mm;
 }

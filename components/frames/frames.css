@@ -464,10 +464,20 @@
   }
   /* On small screens drop the leader-line diagram; show the photo + a plain label list. */
   .dossier__specimen {
+    /* Beat the inline per-photo aspect-ratio so the box sizes to its in-flow content — this
+       lets the photo and the label list stack instead of the labels overlapping the photo. */
+    aspect-ratio: auto !important;
     height: auto;
     width: min(78vw, 360px);
     justify-self: center;
     order: -1;
+  }
+  /* Photo flows in normal order (not absolute) so the static label list sits BELOW it. */
+  .dossier__photo {
+    position: static;
+    height: auto;
+    max-height: 62vh;
+    object-fit: contain;
   }
   .dossier__lines,
   .dossier__dot {
