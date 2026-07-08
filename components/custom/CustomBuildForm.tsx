@@ -1,14 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { upload } from "@vercel/blob/client";
+import dynamic from "next/dynamic";
 import { FormField } from "@/components/ui/FormField";
 import { Button } from "@/components/ui/Button";
 import { CustomBuildSchema } from "@/lib/form-schema";
 import { shouldAttach } from "@/lib/model-formats";
 import { FileDropzone } from "./FileDropzone";
-import { ModelViewer } from "./ModelViewer";
 import "./custom.css";
+
+// The preview (and, through it, the 3D engine) is only needed once a file is chosen — load it
+// on demand so the initial contact bundle stays lean. ssr:false: it's a browser-only viewer.
+const ModelViewer = dynamic(
+  () => import("./ModelViewer").then((m) => m.ModelViewer),
+  { ssr: false },
+);
 
 type PathKey = "design" | "idea" | "general";
 type Status = "idle" | "submitting" | "success" | "error";
@@ -84,7 +90,9 @@ export function CustomBuildForm({ path = "general" }: CustomBuildFormProps) {
       if (file && shouldAttach(file.size)) {
         body.set("file", file);
       } else if (file) {
-        // Too large to attach — upload to Blob and send the link instead.
+        // Too large to attach — upload to Blob and send the link instead. The Blob client is
+        // imported here (not at module load) so it only ships to visitors who upload a big file.
+        const { upload } = await import("@vercel/blob/client");
         const blob = await upload(file.name, file, {
           access: "public",
           handleUploadUrl: "/api/upload",
