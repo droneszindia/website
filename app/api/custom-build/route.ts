@@ -3,6 +3,7 @@ import { CustomBuildSchema } from "@/lib/form-schema";
 import { ATTACH_MAX_BYTES, validateFile } from "@/lib/model-formats";
 import { sendLeadEmail, type LeadAttachment } from "@/lib/email";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
+import { isBlobUrl } from "@/lib/blob-url";
 
 /**
  * Custom-build lead submission. Accepts multipart/form-data: the text fields, plus EITHER a
@@ -12,21 +13,15 @@ import { clientIp, rateLimit } from "@/lib/rate-limit";
  * no storage of record: the inbox (with attachment or Blob link) is the lead store.
  */
 
-// Public Blob URLs live on this host; a large-file `fileUrl` must match so we never email an
-// attacker-supplied link. We only ever put the URL in the email body, never fetch it.
-const BLOB_HOST_SUFFIX = ".public.blob.vercel-storage.com";
-
-function isBlobUrl(value: string): boolean {
-  try {
-    const url = new URL(value);
-    return url.protocol === "https:" && url.hostname.endsWith(BLOB_HOST_SUFFIX);
-  } catch {
-    return false;
-  }
-}
-
-function fail(message: string, status: number, extra?: Record<string, string>): NextResponse {
-  return NextResponse.json({ success: false, error: message }, { status, headers: extra });
+function fail(
+  message: string,
+  status: number,
+  extra?: Record<string, string>,
+): NextResponse {
+  return NextResponse.json(
+    { success: false, error: message },
+    { status, headers: extra },
+  );
 }
 
 export async function POST(request: Request): Promise<NextResponse> {
@@ -58,7 +53,10 @@ export async function POST(request: Request): Promise<NextResponse> {
     _hp: form.get("_hp") ?? "",
   });
   if (!parsed.success) {
-    return fail(parsed.error.issues[0]?.message ?? "Please check the form.", 400);
+    return fail(
+      parsed.error.issues[0]?.message ?? "Please check the form.",
+      400,
+    );
   }
   const lead = parsed.data;
 
@@ -74,7 +72,10 @@ export async function POST(request: Request): Promise<NextResponse> {
     const check = validateFile(file);
     if (!check.ok) return fail(check.error ?? "That file can’t be used.", 400);
     if (file.size > ATTACH_MAX_BYTES) {
-      return fail("Large files must be uploaded to storage, not attached.", 400);
+      return fail(
+        "Large files must be uploaded to storage, not attached.",
+        400,
+      );
     }
     attachment = {
       filename: file.name,
@@ -98,7 +99,10 @@ export async function POST(request: Request): Promise<NextResponse> {
   });
 
   if (!result.ok) {
-    return fail("We couldn’t send your enquiry. Please email us directly.", 502);
+    return fail(
+      "We couldn’t send your enquiry. Please email us directly.",
+      502,
+    );
   }
   return NextResponse.json({ success: true });
 }

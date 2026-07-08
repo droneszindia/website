@@ -32,11 +32,11 @@ const PATH_LABEL: Record<string, string> = {
   general: "General enquiry",
 };
 
-function subjectFor(lead: LeadEmail): string {
+export function subjectFor(lead: LeadEmail): string {
   return `Custom build — ${PATH_LABEL[lead.path] ?? "enquiry"} — ${lead.name}`;
 }
 
-function bodyText(lead: LeadEmail): string {
+export function bodyText(lead: LeadEmail): string {
   const lines = [
     `Name: ${lead.name}`,
     `Email: ${lead.email}`,
@@ -67,12 +67,16 @@ export async function sendLeadEmail(lead: LeadEmail): Promise<SendResult> {
   const to = process.env.CONTACT_TO_EMAIL || CONTACT.email;
   // A verified sender the client controls goes in RESEND_FROM; until then Resend's shared
   // onboarding sender lets the flow work end-to-end for testing.
-  const from = process.env.RESEND_FROM || `${SITE.shortName} <onboarding@resend.dev>`;
+  const from =
+    process.env.RESEND_FROM || `${SITE.shortName} <onboarding@resend.dev>`;
 
   if (!apiKey) {
     // Deliberate operational fallback, not stray debug output: with no provider configured we
     // must not lose the lead, so record it server-side and report success to the visitor.
-    console.info("[lead] RESEND_API_KEY unset — lead not emailed:", bodyText(lead));
+    console.info(
+      "[lead] RESEND_API_KEY unset — lead not emailed:",
+      bodyText(lead),
+    );
     return { ok: true, logged: true };
   }
 
@@ -85,12 +89,20 @@ export async function sendLeadEmail(lead: LeadEmail): Promise<SendResult> {
       subject: subjectFor(lead),
       text: bodyText(lead),
       attachments: lead.attachment
-        ? [{ filename: lead.attachment.filename, content: lead.attachment.content }]
+        ? [
+            {
+              filename: lead.attachment.filename,
+              content: lead.attachment.content,
+            },
+          ]
         : undefined,
     });
     if (error) return { ok: false, error: error.message };
     return { ok: true };
   } catch (error: unknown) {
-    return { ok: false, error: error instanceof Error ? error.message : "send failed" };
+    return {
+      ok: false,
+      error: error instanceof Error ? error.message : "send failed",
+    };
   }
 }
