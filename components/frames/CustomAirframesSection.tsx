@@ -131,12 +131,14 @@ const PATHS = [
     title: "I have a design",
     body: "CAD or STEP files ready to go. We validate them, optimize for manufacturability, and build.",
     href: "/contact?path=design",
+    cta: "Upload your design →",
   },
   {
     tag: "Option B",
     title: "I have an idea",
     body: "Just a mission and a sketch. Our team engineers it from requirements to a finished airframe.",
     href: "/contact?path=idea",
+    cta: "Share your idea →",
   },
 ];
 
@@ -150,6 +152,7 @@ function CustomFork({ form }: { form?: ReactNode }) {
             <span className="path-card__tag">{p.tag}</span>
             <h3 className="path-card__title">{p.title}</h3>
             <p className="path-card__body">{p.body}</p>
+            <span className="path-card__cta">{p.cta}</span>
           </a>
         ))}
       </div>

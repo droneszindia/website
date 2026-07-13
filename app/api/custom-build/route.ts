@@ -87,6 +87,12 @@ export async function POST(request: Request): Promise<NextResponse> {
     fileName = (form.get("fileName") as string | null)?.trim() || "upload";
   }
 
+  // Option A ("I have a design") must include a file — mirrors the client-side guard so the
+  // rule holds even if the form is bypassed.
+  if (lead.path === "design" && !attachment && !fileUrl) {
+    return fail("A design file is required for this request.", 400);
+  }
+
   const result = await sendLeadEmail({
     name: lead.name,
     email: lead.email,

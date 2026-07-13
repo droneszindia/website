@@ -43,8 +43,18 @@ export function CustomBuildForm({ path = "general" }: CustomBuildFormProps) {
   const [honeypot, setHoneypot] = useState("");
 
   const [errors, setErrors] = useState<FieldErrors>({});
+  const [fileError, setFileError] = useState<string | null>(null);
   const [status, setStatus] = useState<Status>("idle");
   const [formError, setFormError] = useState<string | null>(null);
+
+  // Option A ("I have a design") must ship a file; Option B / general enquiries are free to
+  // send just a brief. Enforced here and again server-side at the trust boundary.
+  const fileRequired = path === "design";
+
+  const handleFile = (f: File) => {
+    setFile(f);
+    setFileError(null);
+  };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,6 +86,12 @@ export function CustomBuildForm({ path = "general" }: CustomBuildFormProps) {
       return;
     }
     setErrors({});
+
+    if (fileRequired && !file) {
+      setFileError("Please attach your design file to continue.");
+      return;
+    }
+    setFileError(null);
     setStatus("submitting");
 
     try {
@@ -175,14 +191,26 @@ export function CustomBuildForm({ path = "general" }: CustomBuildFormProps) {
 
       <div className="custom-form__file">
         <p className="custom-form__file-label">
-          Attach a design or reference (optional)
+          {fileRequired ? (
+            <>
+              Attach your design{" "}
+              <span className="custom-form__req">(required)</span>
+            </>
+          ) : (
+            "Attach a design or reference (optional)"
+          )}
         </p>
         <FileDropzone
           file={file}
-          onFileSelected={setFile}
+          onFileSelected={handleFile}
           onCleared={() => setFile(null)}
-          onError={(m) => setFormError(m)}
+          onError={(m) => setFileError(m)}
         />
+        {fileError && (
+          <p className="custom-form__error" role="alert">
+            {fileError}
+          </p>
+        )}
         {file && <ModelViewer file={file} />}
       </div>
 

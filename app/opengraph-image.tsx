@@ -23,41 +23,53 @@ export default function OpengraphImage() {
   const markSrc = `data:image/png;base64,${mark.toString("base64")}`;
 
   return new ImageResponse(
-    (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          background: VOID,
-          padding: "80px",
-          // Faint red horizon so the void isn't dead-flat — echoes the site's hero scrim.
-          backgroundImage: `radial-gradient(120% 80% at 50% 130%, rgba(235,7,4,0.22), transparent 60%)`,
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "28px" }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={markSrc} width={96} height={96} alt="" />
-          <span style={{ fontSize: 64, fontWeight: 700, color: INK }}>
-            Drones<span style={{ color: RED }}>Z</span>
-          </span>
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          <span style={{ fontSize: 72, fontWeight: 700, color: INK, lineHeight: 1.05 }}>
-            Redefining Flight.
-          </span>
-          <span style={{ fontSize: 72, fontWeight: 700, color: RED, lineHeight: 1.05 }}>
-            Assembling the Future.
-          </span>
-          <span style={{ fontSize: 30, color: "#9A9AA2", marginTop: "12px" }}>
-            Custom airframes · Counter-UAS · Engineered in Mumbai
-          </span>
-        </div>
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        background: VOID,
+        padding: "80px",
+        // Faint red horizon so the void isn't dead-flat — echoes the site's hero scrim.
+        backgroundImage: `radial-gradient(120% 80% at 50% 130%, rgba(235,7,4,0.22), transparent 60%)`,
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", gap: "28px" }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={markSrc} width={96} height={96} alt="" />
+        <span style={{ fontSize: 64, fontWeight: 700, color: INK }}>
+          Drones<span style={{ color: RED }}>Z</span>
+        </span>
       </div>
-    ),
+
+      <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+        <span
+          style={{
+            fontSize: 72,
+            fontWeight: 700,
+            color: INK,
+            lineHeight: 1.05,
+          }}
+        >
+          Redefining Flight.
+        </span>
+        <span
+          style={{
+            fontSize: 72,
+            fontWeight: 700,
+            color: RED,
+            lineHeight: 1.05,
+          }}
+        >
+          Assembling the Future.
+        </span>
+        <span style={{ fontSize: 30, color: "#9A9AA2", marginTop: "12px" }}>
+          Custom airframes · Counter-UAS · Engineered in Indore
+        </span>
+      </div>
+    </div>,
     { ...size },
   );
 }

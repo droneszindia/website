@@ -95,7 +95,7 @@ export function HeroSection() {
         </h1>
         <p className="hero-sub">
           Custom airframes, counter-UAS systems, and flight-ready platforms —
-          engineered in Mumbai, assembled for the mission.
+          engineered in Indore, assembled for the mission.
         </p>
       </div>
 

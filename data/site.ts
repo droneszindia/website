@@ -20,8 +20,8 @@ export const SITE = {
   shortName: "DronesZ",
   tagline: "Redefining Flight. Assembling the Future.",
   description:
-    "DronesZ India — custom airframes, counter-UAS systems, consumer drones, components, and drone-lab setup. Engineered in Mumbai.",
-  location: "Mumbai, India",
+    "DronesZ India — custom airframes, counter-UAS systems, consumer drones, components, and drone-lab setup. Engineered in Indore.",
+  location: "Indore, MP",
 } as const;
 
 export interface Pillar {
@@ -47,10 +47,10 @@ export const PILLARS: Pillar[] = [
 export const CONTACT = {
   email: "enquiry.dronesz@gmail.com",
   phone: "+91 98273 44411",
-  address: "Mumbai, Maharashtra, India",
+  address: "Indore, Madhya Pradesh, India",
 } as const;
 
 export const FOOTER = {
-  blurb: "Engineered in Mumbai. Assembled for the mission.",
+  blurb: "Engineered in Indore. Assembled for the mission.",
   copyright: `© ${new Date().getFullYear()} DronesZ India. All rights reserved.`,
 } as const;

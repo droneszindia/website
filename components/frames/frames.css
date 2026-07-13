@@ -242,6 +242,18 @@
   font-size: var(--text-base);
   line-height: 1.5;
 }
+.path-card__cta {
+  display: inline-block;
+  margin-top: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--color-brand-red);
+  transition: transform var(--duration-fast) var(--ease-out-expo);
+}
+.path-card:hover .path-card__cta {
+  transform: translateX(3px);
+}
 .custom-fork__cta {
   margin-top: var(--space-4);
   display: flex;
