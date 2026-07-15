@@ -164,6 +164,16 @@ export const FRAME_STORIES: FrameStory[] = [
   },
 ];
 
+/**
+ * Shared aspect for every dossier specimen box = the widest frame's photo aspect. All four cards
+ * then occupy one identical footprint (they used to vary ~52% in width). Narrower photos are
+ * centred with a blurred-fill backdrop (see FrameDossierPanel); nothing is cropped because the box
+ * is at least as wide as every photo. Callout anchors are remapped into this box in the panel.
+ */
+export const FRAME_BOX_ASPECT = Math.max(
+  ...FRAME_STORIES.map((s) => s.image.width / s.image.height),
+);
+
 export interface CustomAirframes {
   eyebrow: string;
   title: string;

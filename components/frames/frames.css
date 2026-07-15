@@ -371,8 +371,25 @@
 .dossier__specimen {
   position: relative;
   height: 78vh;
-  /* aspect-ratio is set inline per-frame (matches each photo) so callout anchors map correctly. */
+  /* aspect-ratio is set inline = FRAME_BOX_ASPECT (uniform across all four cards). */
   justify-self: start;
+}
+/* Clips the blurred fill's bleed; labels sit outside it so they aren't clipped. */
+.dossier__plate {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+/* Blurred cover-fit backdrop — fills the side bars of frames narrower than the shared box with a
+   soft extension of each photo's own charcoal backdrop, so there is no visible seam. Decorative. */
+.dossier__fill {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.18);
+  filter: blur(40px) brightness(0.5);
 }
 .dossier__photo,
 .dossier__video {
@@ -476,13 +493,22 @@
   }
   /* On small screens drop the leader-line diagram; show the photo + a plain label list. */
   .dossier__specimen {
-    /* Beat the inline per-photo aspect-ratio so the box sizes to its in-flow content — this
+    /* Beat the inline uniform aspect-ratio so the box sizes to its in-flow content — this
        lets the photo and the label list stack instead of the labels overlapping the photo. */
     aspect-ratio: auto !important;
     height: auto;
     width: min(78vw, 360px);
     justify-self: center;
     order: -1;
+  }
+  /* Static stacked layout: no uniform box, so no side bars — drop the blurred fill and let the
+     plate flow so the photo sizes to its own aspect. */
+  .dossier__plate {
+    position: static;
+    overflow: visible;
+  }
+  .dossier__fill {
+    display: none;
   }
   /* Photo flows in normal order (not absolute) so the static label list sits BELOW it. */
   .dossier__photo {
