@@ -56,7 +56,9 @@ export function Nav() {
           height={26}
           className="nav__brand-mark"
         />
-        Drones<span className="accent">Z</span>
+        <span className="nav__wordmark">
+          Drones<span className="accent">Z</span>
+        </span>
       </Link>
       <nav aria-label="Main navigation">
         <ul className="nav__links">

@@ -13,7 +13,9 @@ export function Footer() {
             height={30}
             className="footer__brand-mark"
           />
-          Drones<span className="accent">Z</span>
+          <span className="footer__wordmark">
+            Drones<span className="accent">Z</span>
+          </span>
         </div>
         <p className="footer__blurb">{FOOTER.blurb}</p>
       </div>
