@@ -374,22 +374,21 @@
   /* aspect-ratio is set inline = FRAME_BOX_ASPECT (uniform across all four cards). */
   justify-self: start;
 }
-/* Clips the blurred fill's bleed; labels sit outside it so they aren't clipped. */
+/* Holds the specimen photo; the gradient fills the side bars of frames narrower than the shared
+   box with a soft charcoal backdrop tuned to the flat-lays' own ~#212121 studio ground.
+   NOTE: this used to be a blurred cover-fit <img> (filter: blur()), but that filter promoted the
+   specimen to a composited layer in WebKit/Safari, which swallowed the sibling leader-line SVG's
+   stroke-dashoffset repaints — the callout lines rendered pre-drawn instead of animating on scroll.
+   A pure CSS gradient carries the same look with no filter, so the SVG repaints correctly. */
 .dossier__plate {
   position: absolute;
   inset: 0;
   overflow: hidden;
-}
-/* Blurred cover-fit backdrop — fills the side bars of frames narrower than the shared box with a
-   soft extension of each photo's own charcoal backdrop, so there is no visible seam. Decorative. */
-.dossier__fill {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1.18);
-  filter: blur(40px) brightness(0.5);
+  background: radial-gradient(
+    135% 115% at 50% 42%,
+    oklch(29% 0.004 265),
+    oklch(19% 0.004 265)
+  );
 }
 .dossier__photo,
 .dossier__video {
@@ -501,14 +500,12 @@
     justify-self: center;
     order: -1;
   }
-  /* Static stacked layout: no uniform box, so no side bars — drop the blurred fill and let the
-     plate flow so the photo sizes to its own aspect. */
+  /* Static stacked layout: no uniform box, so no side bars — drop the gradient backdrop and let
+     the plate flow so the photo sizes to its own aspect. */
   .dossier__plate {
     position: static;
     overflow: visible;
-  }
-  .dossier__fill {
-    display: none;
+    background: none;
   }
   /* Photo flows in normal order (not absolute) so the static label list sits BELOW it. */
   .dossier__photo {

@@ -31,6 +31,13 @@ interface ScrollSectionProps {
    * under reduced-motion the section renders its final state instantly.
    */
   onTimeline?: (tl: gsap.core.Timeline, trigger: HTMLElement) => void;
+  /**
+   * Optional gentle reveal for the reduced-motion (and narrow-width) branch. Runs instead of the
+   * default "snap [data-animate] to resting state." Lets a chapter play a one-shot, scroll-INTO-
+   * VIEW reveal (no pin, no scrub) so its content still animates in for reduced-motion users
+   * rather than appearing pre-drawn. If omitted, the default resting-state snap runs.
+   */
+  onReducedReveal?: (el: HTMLElement) => void;
 }
 
 /**
@@ -47,6 +54,7 @@ export function ScrollSection({
   refreshPriority = 0,
   animateMinWidth,
   onTimeline,
+  onReducedReveal,
 }: ScrollSectionProps) {
   const ref = useRef<HTMLElement>(null);
 
@@ -74,11 +82,16 @@ export function ScrollSection({
             onTimeline(tl, el);
           },
           reduced: () => {
-            // No pin, no scrub: reveal everything in its resting state immediately.
+            // No pin, no scrub. Either play a gentle scroll-into-view reveal (if the chapter
+            // provides one) or snap everything to its resting state immediately.
             el.setAttribute("data-animated", "false");
-            gsap.set(el.querySelectorAll("[data-animate]"), {
-              clearProps: "transform,opacity",
-            });
+            if (onReducedReveal) {
+              onReducedReveal(el);
+            } else {
+              gsap.set(el.querySelectorAll("[data-animate]"), {
+                clearProps: "transform,opacity",
+              });
+            }
           },
         },
         el,

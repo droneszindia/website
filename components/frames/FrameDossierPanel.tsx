@@ -18,28 +18,76 @@ import "./frames.css";
  * NOTE: the "▶ Play assembly" clip toggle is parked until the Veo clips land — the video data model
  * (story.video) and its CSS remain so it can be re-wired here without touching the layout.
  */
-const buildTimeline = (tl: gsap.core.Timeline, el: HTMLElement) => {
-  const lines = el.querySelectorAll<SVGLineElement>(".dossier__line");
-  const dots = el.querySelectorAll<HTMLElement>(".dossier__dot");
-  const labels = el.querySelectorAll<HTMLElement>(".dossier__label");
+/** The three annotation layers a reveal animates. */
+const collect = (el: HTMLElement) => ({
+  lines: el.querySelectorAll<SVGLineElement>(".dossier__line"),
+  dots: el.querySelectorAll<HTMLElement>(".dossier__dot"),
+  labels: el.querySelectorAll<HTMLElement>(".dossier__label"),
+});
 
-  gsap.set(lines, { strokeDashoffset: 1 });
+/** Below this width the pinned diagram is dropped for the static stacked layout (lines hidden). */
+const DOSSIER_MIN_WIDTH = 861;
+
+const buildTimeline = (tl: gsap.core.Timeline, el: HTMLElement) => {
+  const { lines, dots, labels } = collect(el);
+
+  // Lines reveal via BOTH opacity and stroke-dashoffset: Blink/Gecko honour the dashoffset for a
+  // "draw" effect; WebKit/Safari ignores stroke-dashoffset on these non-scaling-stroke lines in a
+  // preserveAspectRatio="none" viewBox (they'd render pre-drawn), so opacity is what actually hides
+  // them there — degrading gracefully to a fade-in. Opacity is honoured everywhere.
+  gsap.set(lines, { strokeDashoffset: 1, opacity: 0 });
   gsap.set(dots, { scale: 0, transformOrigin: "50% 50%" });
   gsap.set(labels, { opacity: 0, x: 14 });
 
-  lines.forEach((line, i) => {
-    tl.to(
-      line,
-      { strokeDashoffset: 0, duration: 0.5, ease: "power2.inOut" },
-      i * 0.5,
+  // Every callout reveals TOGETHER as the frame scrubs in — all lines draw, all dots pop, all
+  // labels fade at once (no per-callout stagger), then hold fully-shown for the rest of the pin
+  // so the specs stay readable while the frame is held. (Was a sequential i*0.5 stagger, which
+  // pushed later callouts to the far end of the pin so they read as static on a normal scroll.)
+  tl.to(
+    lines,
+    { strokeDashoffset: 0, opacity: 1, duration: 0.6, ease: "power2.inOut" },
+    0,
+  )
+    .to(dots, { scale: 1, duration: 0.3 }, 0.15)
+    .to(labels, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }, 0.2)
+    .to({}, { duration: 0.5 }); // hold the revealed state while pinned
+};
+
+/**
+ * Reduced-motion reveal: NO pin, NO scrub — a gentle one-shot draw played once when the frame
+ * scrolls into view, so callouts still animate in rather than appearing pre-drawn/baked. Labels
+ * fade with no horizontal slide (gentler for reduced-motion). Only for the desktop dossier layout;
+ * below DOSSIER_MIN_WIDTH the lines are display:none and labels stack statically, so we keep the
+ * plain resting-state snap there.
+ */
+const revealOnEnter = (el: HTMLElement) => {
+  if (window.innerWidth < DOSSIER_MIN_WIDTH) {
+    gsap.set(el.querySelectorAll("[data-animate]"), {
+      clearProps: "transform,opacity",
+    });
+    return;
+  }
+  const { lines, dots, labels } = collect(el);
+  // opacity hides the lines everywhere (WebKit ignores stroke-dashoffset here — see buildTimeline).
+  gsap.set(lines, { strokeDashoffset: 1, opacity: 0 });
+  gsap.set(dots, { scale: 0, transformOrigin: "50% 50%" });
+  gsap.set(labels, { opacity: 0, x: 0 });
+
+  gsap
+    .timeline({
+      scrollTrigger: {
+        trigger: el,
+        start: "top 78%",
+        toggleActions: "play none none none", // fire once on enter; no reverse/scrub
+      },
+    })
+    .to(
+      lines,
+      { strokeDashoffset: 0, opacity: 1, duration: 0.5, ease: "power2.inOut" },
+      0,
     )
-      .to(dots[i], { scale: 1, duration: 0.2 }, "<")
-      .to(
-        labels[i],
-        { opacity: 1, x: 0, duration: 0.3, ease: "power2.out" },
-        ">-0.1",
-      );
-  });
+    .to(dots, { scale: 1, duration: 0.25 }, 0.1)
+    .to(labels, { opacity: 1, duration: 0.4, ease: "power2.out" }, 0.15);
 };
 
 interface FrameDossierPanelProps {
@@ -69,12 +117,15 @@ export function FrameDossierPanel({
       id={story.id}
       className="frame-panel dossier"
       pin
-      scrollDistance={Math.max(1.2, callouts.length * 0.45)}
+      // All callouts reveal together, so the pin no longer scales with callout count — a short,
+      // fixed distance draws them in right as the frame enters, then holds them (see buildTimeline).
+      scrollDistance={1}
       refreshPriority={refreshPriority}
       // ≤860px the pinned leader-line diagram doesn't fit — degrade to a static stacked
       // photo + label list (matches the frames.css mobile block) instead of clipping.
-      animateMinWidth={861}
+      animateMinWidth={DOSSIER_MIN_WIDTH}
       onTimeline={buildTimeline}
+      onReducedReveal={revealOnEnter}
     >
       <div className="dossier__header">
         <div className="dossier__eyebrow-row">
@@ -91,20 +142,10 @@ export function FrameDossierPanel({
         // Uniform box across all four frames (widest photo's aspect) so the cards share one size.
         style={{ aspectRatio: FRAME_BOX_ASPECT }}
       >
-        {/* Clipped media plate: a blurred cover-fit copy fills the box behind the sharp photo so
-            narrower frames get a seamless side-fill (each photo extends its own backdrop). Labels
-            live OUTSIDE this plate (they overflow right), so the plate's overflow:hidden — needed
-            to contain the blur bleed — doesn't clip them. */}
+        {/* Clipped media plate: a CSS gradient (see .dossier__plate) fills the box behind the
+            sharp photo so narrower frames get a soft charcoal side-fill. Labels live OUTSIDE this
+            plate (they overflow right), so the plate's overflow:hidden doesn't clip them. */}
         <div className="dossier__plate">
-          <Image
-            className="dossier__fill"
-            src={story.image.src}
-            width={story.image.width}
-            height={story.image.height}
-            alt=""
-            aria-hidden="true"
-            sizes="240px"
-          />
           <Image
             className="dossier__photo"
             src={story.image.src}
