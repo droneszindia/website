@@ -51,6 +51,11 @@
 }
 .nav__brand .accent {
   color: var(--color-brand-red);
+  /* Optical correction: the saturated red cap "Z" reads slightly high against the white
+     lowercase-ending wordmark on dark; a sub-pixel drop settles it onto the shared baseline.
+     inline-block so the transform applies; the wordmark never wraps so flow is unaffected. */
+  display: inline-block;
+  transform: translateY(0.8px);
 }
 
 .nav__links {

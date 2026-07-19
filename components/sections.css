@@ -120,6 +120,9 @@
 }
 .footer__brand .accent {
   color: var(--color-brand-red);
+  /* Optical correction — mirrors the nav wordmark (see nav.css .nav__brand .accent). */
+  display: inline-block;
+  transform: translateY(0.8px);
 }
 .footer__blurb {
   color: var(--color-muted);
